@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1071863984676",
+    "project_id": "better-and-faster-emergency",
+    "storage_bucket": "better-and-faster-emergency.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071863984676:android:01949e46681e3a1bfadeb1",
+        "android_client_info": {
+          "package_name": "com.betterandfasteremergency"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACWbk5zrpIUSI9dS5o_fReEwKM8iW4xBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

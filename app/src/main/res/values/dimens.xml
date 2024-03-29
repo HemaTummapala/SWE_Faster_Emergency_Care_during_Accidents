@@ -1,0 +1,24 @@
+<!--
+  ~
+  ~ /**
+  ~  * Author  Jayaraj Kadiveti
+  ~  * Last Modified On: 10/02/23, 5:41 PM
+  ~  * (c) Copyright by Xyram Software Solutions.
+  ~  */
+  -->
+
+<resources>
+
+    <!--font_sizes-->
+    <dimen name="small_fontSize">12dp</dimen>
+    <dimen name="normal_fontSize">14dp</dimen>
+    <dimen name="medium_fontSize">16dp</dimen>
+    <dimen name="large_fontSize">28dp</dimen>
+    <dimen name="font_size">16dp</dimen>
+    <dimen name="login_sp">32dp</dimen>
+    <dimen name="login_sp_tb">36dp</dimen>
+    <dimen name="medium_large_fontSize">18dp</dimen>
+
+
+
+</resources>
