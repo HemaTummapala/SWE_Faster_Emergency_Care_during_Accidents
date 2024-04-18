@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_app_bg1"
     android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_logout"
+        app:tint="@color/primary_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,6 +93,8 @@
             android:padding="10dp"
             android:textSize="20dp"
             android:text="Emergency Alert" />
+
+
     </LinearLayout>
 
 </RelativeLayout>

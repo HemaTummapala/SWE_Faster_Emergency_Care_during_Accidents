@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.App;
@@ -21,7 +22,7 @@ public class AddAmbulance extends AppCompatActivity {
     EditText e3;
     EditText e4;
     EditText e5;
-
+    ImageView i1;
     /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
         AppConstants.setStatusBarGradiant(AddAmbulance.this);
@@ -34,6 +35,7 @@ public class AddAmbulance extends AppCompatActivity {
         this.e5 = (EditText) findViewById(R.id.addambulanceAddress);
         Button button = (Button) findViewById(R.id.registerAmbulance);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String name = AddAmbulance.this.e1.getText().toString();
@@ -57,6 +59,7 @@ public class AddAmbulance extends AppCompatActivity {
                         new DAO().addObject(Constants.USER_DB, user, user.getMobile());
                         Toast.makeText(AddAmbulance.this.getApplicationContext(), "Ambulance Added Successfully", Toast.LENGTH_SHORT).show();
                         AddAmbulance.this.startActivity(new Intent(AddAmbulance.this.getApplicationContext(), AdminHome.class));
+                        finish();
                     } catch (Exception ex) {
                         Toast.makeText(AddAmbulance.this.getApplicationContext(), "Register Error", Toast.LENGTH_SHORT).show();
                         Log.v("Ambulance Registration", ex.toString());
@@ -65,5 +68,20 @@ public class AddAmbulance extends AppCompatActivity {
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddAmbulance.this, AdminHome.class);
+        startActivity(intent);
+        finish();
     }
 }

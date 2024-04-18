@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.R;
@@ -23,7 +24,7 @@ public class AddBloodBank extends AppCompatActivity {
     EditText e3;
     EditText e4;
     EditText e5;
-
+    ImageView i1;
     /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
         AppConstants.setStatusBarGradiant(AddBloodBank.this);
@@ -36,6 +37,7 @@ public class AddBloodBank extends AppCompatActivity {
         this.e5 = (EditText) findViewById(R.id.addbloodbankAddress);
         Button button = (Button) findViewById(R.id.registerBloodBank);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String name = AddBloodBank.this.e1.getText().toString();
@@ -59,6 +61,7 @@ public class AddBloodBank extends AppCompatActivity {
                         new DAO().addObject(Constants.USER_DB, user, user.getMobile());
                         Toast.makeText(AddBloodBank.this.getApplicationContext(), "BloodBank Added Successfully", Toast.LENGTH_SHORT).show();
                         AddBloodBank.this.startActivity(new Intent(AddBloodBank.this.getApplicationContext(), AdminHome.class));
+                        finish();
                     } catch (Exception ex) {
                         Toast.makeText(AddBloodBank.this.getApplicationContext(), "Register Error", Toast.LENGTH_SHORT).show();
                         Log.v("BloodBank Registration", ex.toString());
@@ -67,5 +70,20 @@ public class AddBloodBank extends AppCompatActivity {
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddBloodBank.this, AdminHome.class);
+        startActivity(intent);
+        finish();
     }
 }

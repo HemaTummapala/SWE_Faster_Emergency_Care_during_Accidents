@@ -24,6 +24,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.R;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Button b2;
     Button b3;
     Button b5;
+
+    ImageView ivLogout;
     /* access modifiers changed from: private */
     public boolean isGPS = false;
     private long lastUpdate = 0;
@@ -85,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         SensorManager sensorManager2 = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.sensorManager = sensorManager2;
-        if (sensorManager2.getDefaultSensor(1) != null) {
-            Sensor defaultSensor = this.sensorManager.getDefaultSensor(1);
+        if (sensorManager2.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            Sensor defaultSensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             this.accelerometer = defaultSensor;
-            this.sensorManager.registerListener(this, defaultSensor, 3);
+            this.sensorManager.registerListener(this, defaultSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
             Toast.makeText(getApplicationContext(), "dont have accelerometer sensor", Toast.LENGTH_LONG).show();
         }
@@ -120,10 +123,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         };
+
+
         this.b1 = (Button) findViewById(R.id.loginButton);
         this.b2 = (Button) findViewById(R.id.registerButton);
         this.b3 = (Button) findViewById(R.id.emergencyalert);
         this.b5 = (Button) findViewById(R.id.userviewusers);
+        this.ivLogout = (ImageView) findViewById(R.id.logout);
         Session session = new Session(getApplicationContext());
         SQLiteDatabase openOrCreateDatabase = openOrCreateDatabase(Constants.sqLiteDatabase, 0, (SQLiteDatabase.CursorFactory) null);
         this.sqLiteDatabase = openOrCreateDatabase;
@@ -135,13 +141,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         String str = this.userName;
         if (str == null || str == "") {
+            this.ivLogout.setVisibility(View.GONE);
             this.b3.setEnabled(false);
         } else {
             session.setusename(str);
             session.setRole("user");
             this.b1.setEnabled(false);
             this.b2.setEnabled(false);
+            this.ivLogout.setVisibility(View.VISIBLE);
+
         }
+
+        this.ivLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ivLogout.setVisibility(View.GONE);
+                b1.setEnabled(true);
+                b2.setEnabled(true);
+                b3.setEnabled(false);
+                final Session s = new Session(getApplicationContext());
+                s.loggingOut();
+
+
+
+            }
+        });
+
         this.b1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 MainActivity.this.startActivity(new Intent(MainActivity.this.getApplicationContext(), LoginActivity.class));
@@ -150,18 +175,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.b2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 MainActivity.this.startActivity(new Intent(MainActivity.this.getApplicationContext(), RegisterActivity.class));
+                finish();
             }
         });
         this.b3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this.getApplicationContext(), "in function", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(), "Updating Location", Toast.LENGTH_SHORT).show();
                 if (!MainActivity.this.isGPS) {
                     Toast.makeText(MainActivity.this.getApplicationContext(), "Please turn on GPS", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 MainActivity.this.getLocation();
                 if (MainActivity.this.txtLocation != null) {
-                    Toast.makeText(MainActivity.this.getApplicationContext(), "location not null", Toast.LENGTH_SHORT).show();
                     final String[] userLatLongs = MainActivity.this.txtLocation.split(",");
                     new DAO();
                     DAO.getDBReference(Constants.FAMILY_DB).addValueEventListener(new ValueEventListener() {
@@ -182,10 +207,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                                 if (user != null) {
                                                     Log.v("user info :", user.toString());
                                                     if (!user.getType().equals("user")) {
-                                                        String[] latLongs = user.getAddress().split(",");
-                                                        if (MainActivity.getDistanceFromCurrentPosition(new Double(userLatLongs[0]).doubleValue(), new Double(userLatLongs[1]).doubleValue(), new Double(latLongs[0]).doubleValue(), new Double(latLongs[1]).doubleValue()) < 10000.0f) {
-                                                            senders.add(user.getMobile());
+                                                        try{
+                                                            String[] latLongs = user.getAddress().split(",");
+                                                            if (MainActivity.getDistanceFromCurrentPosition(new Double(userLatLongs[0]).doubleValue(), new Double(userLatLongs[1]).doubleValue(), new Double(latLongs[0]).doubleValue(), new Double(latLongs[1]).doubleValue()) < 10000.0f) {
+                                                                senders.add(user.getMobile());
+                                                            }
+                                                        }catch (Exception e){
+
                                                         }
+
                                                     }
                                                 }
                                                 Toast.makeText(MainActivity.this.getApplicationContext(), "Nearest Added", Toast.LENGTH_LONG).show();
@@ -215,13 +245,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     });
                     return;
                 }
-                Toast.makeText(MainActivity.this.getApplicationContext(), "Location Null", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(), "Location Not Updated", Toast.LENGTH_SHORT).show();
             }
         });
         this.b5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Log.v("going to list users :", "");
                 MainActivity.this.startActivity(new Intent(MainActivity.this.getApplicationContext(), ListUsers.class));
+                finish();
             }
         });
     }
@@ -235,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     /* access modifiers changed from: private */
     public void getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == 0 || ActivityCompat.checkSelfPermission(this, "android.permission.ACCESS_COARSE_LOCATION") == 0) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.mFusedLocationClient.getLastLocation().addOnSuccessListener((Activity) this, new OnSuccessListener<Location>() {
                 public void onSuccess(Location location) {
                     if (location != null) {
@@ -259,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"}, 1000);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1003);
         }
     }
 
@@ -364,10 +395,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                                 if (user != null) {
                                                     Log.v("user info :", user.toString());
                                                     if (!user.getType().equals("user")) {
-                                                        String[] latLongs = user.getAddress().split(",");
-                                                        if (MainActivity.getDistanceFromCurrentPosition(new Double(userLatLongs[0]).doubleValue(), new Double(userLatLongs[1]).doubleValue(), new Double(latLongs[0]).doubleValue(), new Double(latLongs[1]).doubleValue()) < 10000.0f) {
-                                                            senders.add(user.getMobile());
-                                                        }
+                                                        try {
+                                                            String[] latLongs = user.getAddress().split(",");
+
+                                                            if (MainActivity.getDistanceFromCurrentPosition(new Double(userLatLongs[0]).doubleValue(), new Double(userLatLongs[1]).doubleValue(), new Double(latLongs[0]).doubleValue(), new Double(latLongs[1]).doubleValue()) < 10000.0f) {
+                                                                senders.add(user.getMobile());
+                                                            }
+                                                        }catch (Exception e){}
+
                                                     }
                                                 }
                                             }
@@ -399,5 +434,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             this.last_y = y;
             this.last_z = z;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MainActivity.this.moveTaskToBack(true);
+        MainActivity.this.finish();
     }
 }

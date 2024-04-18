@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.R;
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText e5;
     EditText e6;
     EditText e7;
+    ImageView i1;
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity {
         this.e7 = (EditText) findViewById(R.id.registerAddress);
         Button button = (Button) findViewById(R.id.registerButton);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String username = RegisterActivity.this.e1.getText().toString();
@@ -79,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                         RegisterActivity.this.db.execSQL("create table if not exists login(username varchar)");
                         SQLiteDatabase sQLiteDatabase = RegisterActivity.this.db;
                         sQLiteDatabase.execSQL("insert into login values('" + username + "')");
+                        finish();
                     } catch (Exception ex) {
                         Toast.makeText(RegisterActivity.this.getApplicationContext(), "Register Error", Toast.LENGTH_SHORT).show();
                         Log.v("User Registration Ex", ex.toString());
@@ -87,5 +92,19 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent= new Intent(RegisterActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

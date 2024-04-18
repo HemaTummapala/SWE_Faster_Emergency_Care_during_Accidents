@@ -1,17 +1,46 @@
 package com.example.betterandfasteremergency.view;
+import android.content.Context;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.betterandfasteremergency.R;
 import com.example.betterandfasteremergency.dao.DAO;
 import com.example.betterandfasteremergency.form.User;
 import com.example.betterandfasteremergency.util.AppConstants;
 import com.example.betterandfasteremergency.util.Constants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class AddHospital extends AppCompatActivity {
     Button b1;
     EditText e1;
@@ -19,6 +48,16 @@ public class AddHospital extends AppCompatActivity {
     EditText e3;
     EditText e4;
     EditText e5;
+    ImageView i1;
+
+    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    private static final String OUT_JSON = "/json";
+
+    private static final String API_KEY = "AIzaSyBE87m2FfpEopd_tF6cW8zJ9ibHx0o0vOQ";
+
+    private static final String DESCRIPTION = "description";
+
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +71,7 @@ public class AddHospital extends AppCompatActivity {
         this.e5 = (EditText) findViewById(R.id.addhospitalAddress);
         Button button = (Button) findViewById(R.id.registerHospital);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String name = AddHospital.this.e1.getText().toString();
@@ -55,6 +95,7 @@ public class AddHospital extends AppCompatActivity {
                         new DAO().addObject(Constants.USER_DB, user, user.getMobile());
                         Toast.makeText(AddHospital.this.getApplicationContext(), "Hospital Added Successfully", Toast.LENGTH_SHORT).show();
                         AddHospital.this.startActivity(new Intent(AddHospital.this.getApplicationContext(), AdminHome.class));
+                        finish();
                     } catch (Exception ex) {
                         Toast.makeText(AddHospital.this.getApplicationContext(), "Register Error", Toast.LENGTH_SHORT).show();
                         Log.v("Hospital Registration", ex.toString());
@@ -63,5 +104,25 @@ public class AddHospital extends AppCompatActivity {
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+
+
+
     }
+
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddHospital.this, AdminHome.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 }

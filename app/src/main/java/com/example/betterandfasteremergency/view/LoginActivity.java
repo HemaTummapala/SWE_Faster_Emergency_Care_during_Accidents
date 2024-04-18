@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.R;
@@ -17,6 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     SQLiteDatabase db;
     EditText e1;
     EditText e2;
+    ImageView i1;
     /* access modifiers changed from: private */
     public Session session;
 
@@ -30,13 +32,14 @@ public class LoginActivity extends AppCompatActivity {
         this.e2 = (EditText) findViewById(R.id.loginPass);
         Button button = (Button) findViewById(R.id.loginConfirm);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String username = LoginActivity.this.e1.getText().toString();
                 String password = LoginActivity.this.e2.getText().toString();
                 if (username == null || password == null || username.length() <= 0 || password.length() <= 0) {
                     Toast.makeText(LoginActivity.this.getApplicationContext(), "Please Enter UserName and Password", Toast.LENGTH_SHORT).show();
-                } else if (!username.equals("admin") || !password.equals("admin")) {
+                } else if (!username.equalsIgnoreCase("admin") || !password.equalsIgnoreCase("admin")) {
                     LoginActivity.this.session.setusename(username);
                     LoginActivity.this.session.setRole("user");
                     LoginActivity loginActivity = LoginActivity.this;
@@ -44,14 +47,31 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.db.execSQL("create table if not exists login(username varchar)");
                     SQLiteDatabase sQLiteDatabase = LoginActivity.this.db;
                     sQLiteDatabase.execSQL("insert into login values('" + username + "')");
+                    Toast.makeText(LoginActivity.this.getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
                     LoginActivity.this.startActivity(new Intent(LoginActivity.this.getApplicationContext(), MainActivity.class));
-                    Toast.makeText(LoginActivity.this.getApplicationContext(), "Please Enter UserName and Password", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     LoginActivity.this.session.setusename("admin");
                     LoginActivity.this.session.setRole("admin");
+                    Toast.makeText(LoginActivity.this.getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
                     LoginActivity.this.startActivity(new Intent(LoginActivity.this.getApplicationContext(), AdminHome.class));
+                    finish();
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent= new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

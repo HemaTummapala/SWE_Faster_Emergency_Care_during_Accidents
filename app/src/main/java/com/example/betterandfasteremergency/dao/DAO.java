@@ -54,10 +54,10 @@ public class DAO {
                     if (str.equals(Constants.USER_DB)) {
                         User user = (User) object;
                         if (str2.equals("all")) {
-                            if (!user.getType().equals("user")) {
+                            if (!user.getType().equalsIgnoreCase("user")) {
                                 viewMap.put(user.getName(), user.getMobile());
                             }
-                        } else if (user.getType().equals(str2)) {
+                        } else if (user.getType().equalsIgnoreCase(str2)) {
                             viewMap.put(user.getName(), user.getMobile());
                         }
                     }

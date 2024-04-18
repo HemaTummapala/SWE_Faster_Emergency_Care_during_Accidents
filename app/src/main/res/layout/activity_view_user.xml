@@ -74,46 +74,84 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/textview_title_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="Name:"
+                    android:gravity="start" />
+
+                <TextView
                     android:id="@+id/textviewname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/edit_txt_bg"
                     android:gravity="start"
                     android:padding="15dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="Email:"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textviewemail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/edit_txt_bg"
                     android:gravity="start"
                     android:padding="15dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="Mobile:"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textviewmobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/edit_txt_bg"
                     android:gravity="start"
                     android:padding="15dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="Address:"
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/textviewaddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/edit_txt_bg"
                     android:gravity="start"
                     android:padding="15dp" />
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:paddingHorizontal="2dp"
+                    android:text="Description:"
+                    android:gravity="start" />
+                <TextView
                     android:id="@+id/textviewdescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/edit_txt_bg"
                     android:gravity="start"
                     android:padding="15dp"/>

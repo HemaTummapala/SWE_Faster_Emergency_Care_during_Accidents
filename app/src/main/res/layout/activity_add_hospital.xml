@@ -71,6 +71,19 @@
             android:hint="Enter Hospital Name"
             android:padding="10dp" />
 
+      <!--  <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/edit_txt_bg"
+            android:dropDownWidth="match_parent"
+            android:hint="Enter Hospital Name"
+            android:imeOptions="actionNext"
+            android:padding="7dp"
+            android:singleLine="true"
+            android:textSize="15sp" />-->
+
         <EditText
             android:id="@+id/addhospitalEmail"
             android:layout_width="match_parent"
@@ -78,6 +91,7 @@
             android:layout_marginVertical="8dp"
             android:background="@drawable/edit_txt_bg"
             android:gravity="start"
+            android:inputType="textEmailAddress"
             android:hint="Enter Email"
             android:padding="10dp" />
 
@@ -88,6 +102,7 @@
             android:layout_marginVertical="8dp"
             android:background="@drawable/edit_txt_bg"
             android:gravity="start"
+            android:inputType="phone|number"
             android:hint="Enter Mobile"
             android:padding="10dp" />
 
@@ -108,6 +123,8 @@
             android:layout_marginVertical="8dp"
             android:background="@drawable/edit_txt_bg"
             android:gravity="start"
+            android:digits="0123456789.,"
+            android:inputType="number"
             android:hint="Enter Latitue, Longitude"
             android:padding="10dp" />
 

@@ -1,5 +1,6 @@
 package com.example.betterandfasteremergency.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.betterandfasteremergency.util.AppConstants;
@@ -37,14 +39,17 @@ public class ViewUser extends AppCompatActivity {
     TextView t3;
     TextView t4;
     TextView t5;
-
+    ImageView i1;
+    TextView title1;
     /* access modifiers changed from: protected */
+    @SuppressLint("MissingInflatedId")
     public void onCreate(Bundle savedInstanceState) {
         AppConstants.setStatusBarGradiant(ViewUser.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user);
         this.cancel = (Button) findViewById(R.id.viewUserCanel);
         this.delete = (Button) findViewById(R.id.viewUserDelete);
+        this.i1=(ImageView) findViewById(R.id.back);
         final String role = new Session(getApplicationContext()).getRole();
         if (!role.equals("admin")) {
             this.delete.setEnabled(false);
@@ -57,19 +62,24 @@ public class ViewUser extends AppCompatActivity {
         this.t3 = (TextView) findViewById(R.id.textviewmobile);
         this.t4 = (TextView) findViewById(R.id.textviewaddress);
         this.t5 = (TextView) findViewById(R.id.textviewdescription);
+        this.title1 = (TextView) findViewById(R.id.textview_title_name);
         new DAO();
         DAO.getDBReference(Constants.USER_DB).child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = (User) dataSnapshot.getValue(User.class);
                 if (user != null) {
                     if (user.getType().equals("ambulance")) {
-                        ViewUser.this.t1.setText("Driver Name : " + user.getName());
+                        ViewUser.this.title1.setText("Driver Name:");
+                        ViewUser.this.t1.setText(user.getName());
                     } else if (user.getType().equals("hospital")) {
-                        ViewUser.this.t1.setText("Hospital Name : " + user.getName());
+                        ViewUser.this.title1.setText("Hospital Name:");
+                        ViewUser.this.t1.setText(user.getName());
                     } else if (user.getType().equals("user")) {
-                        ViewUser.this.t1.setText("Patient Name : " + user.getName());
+                        ViewUser.this.title1.setText("Patient Name:");
+                        ViewUser.this.t1.setText(user.getName());
                     } else if (user.getType().equals("bloodbank")) {
-                        ViewUser.this.t1.setText("Blood Bank Name : " + user.getName());
+                        ViewUser.this.title1.setText("Blood Bank Name:");
+                        ViewUser.this.t1.setText(user.getName());
                     }
                     String[] workLocation = user.getAddress().split(",");
                     String userAddress = "";
@@ -101,12 +111,13 @@ public class ViewUser extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         Log.v("voidmain ", "in on succes ");
+                        userAddress = "Address Not found for the latitude and longitude";
                     }
                     Log.v("voidmai work address ", userAddress);
-                    ViewUser.this.t2.setText("Email: " + user.getEmail());
-                    ViewUser.this.t3.setText("Mobile: " + user.getMobile());
-                    ViewUser.this.t4.setText("Address: " + userAddress);
-                    ViewUser.this.t5.setText("Description : " + user.getDescription());
+                    ViewUser.this.t2.setText(user.getEmail());
+                    ViewUser.this.t3.setText(user.getMobile());
+                    ViewUser.this.t4.setText(userAddress);
+                    ViewUser.this.t5.setText(user.getDescription());
                 }
             }
 
@@ -122,13 +133,30 @@ public class ViewUser extends AppCompatActivity {
                     i = new Intent(ViewUser.this.getApplicationContext(), MainActivity.class);
                 }
                 ViewUser.this.startActivity(i);
+                finish();
             }
         });
         this.delete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 new DAO().deleteObject(Constants.USER_DB, userId);
                 ViewUser.this.startActivity(new Intent(ViewUser.this.getApplicationContext(), AdminHome.class));
+                finish();
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ViewUser.this, AdminHome.class);
+        startActivity(intent);
+        finish();
     }
 }

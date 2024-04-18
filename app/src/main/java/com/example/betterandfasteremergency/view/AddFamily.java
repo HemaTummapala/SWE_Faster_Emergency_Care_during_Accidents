@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.betterandfasteremergency.R;
@@ -19,6 +20,7 @@ public class AddFamily extends AppCompatActivity {
     EditText e1;
     EditText e2;
     EditText e3;
+    ImageView i1;
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class AddFamily extends AppCompatActivity {
         this.e3 = (EditText) findViewById(R.id.addfamilymobile3);
         Button button = (Button) findViewById(R.id.addFamilyButton);
         this.b1 = button;
+        this.i1=(ImageView) findViewById(R.id.back);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String m1 = AddFamily.this.e1.getText().toString();
@@ -49,6 +52,7 @@ public class AddFamily extends AppCompatActivity {
                         new DAO().addObject(Constants.FAMILY_DB, family, family.getFamilyId());
                         Toast.makeText(AddFamily.this.getApplicationContext(), "Added Successfully", Toast.LENGTH_SHORT).show();
                         AddFamily.this.startActivity(new Intent(AddFamily.this.getApplicationContext(), MainActivity.class));
+                        finish();
                     } catch (Exception ex) {
                         Toast.makeText(AddFamily.this.getApplicationContext(), "Register Error", Toast.LENGTH_SHORT).show();
                         Log.v("Family Registration", ex.toString());
@@ -59,5 +63,18 @@ public class AddFamily extends AppCompatActivity {
                 }
             }
         });
+        this.i1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+    /*Back press handling*/
+    @Override
+    public void onBackPressed() {
+        Intent intent= new Intent(AddFamily.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

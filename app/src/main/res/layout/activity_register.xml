@@ -110,6 +110,7 @@
             android:layout_marginVertical="8dp"
             android:background="@drawable/edit_txt_bg"
             android:gravity="start"
+            android:inputType="textEmailAddress"
             android:hint="Enter Email"
             android:padding="10dp" />
 
@@ -121,6 +122,7 @@
             android:background="@drawable/edit_txt_bg"
             android:gravity="start"
             android:hint="Enter Mobile"
+            android:inputType="phone|number"
             android:padding="10dp" />
 
         <EditText
